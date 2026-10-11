@@ -2,7 +2,6 @@ import "dotenv/config";
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import connectDb from "./config/database";
 import authRoute from "./routes/authRoute";
 import errorHandler from "./middleware/errorHandler";
 
@@ -22,6 +21,10 @@ app.use(cookieParser());
 
 // Routes
 
+app.get("/", (req, res) => {
+    return res.status(200).json({ success: true, message: "EstateFlow CRM API is running" });
+});
+
 app.use("/auth", authRoute);
 
 // 404 Handler
@@ -37,21 +40,4 @@ app.use((req, res) => {
 
 app.use(errorHandler);
 
-// Start Server
-
-const startServer = async () => {
-    try {
-        await connectDb();
-
-        const port = process.env.EXPRESS_PORT;
-
-        app.listen(port, () => {
-            console.log(`Server running at http://localhost:${port}`);
-        });
-    } catch (error) {
-        console.error("Unable to connect to database:", (error as Error).message);
-        process.exit(1);
-    }
-};
-
-startServer();
+export default app;

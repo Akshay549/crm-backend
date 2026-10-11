@@ -6,6 +6,7 @@ import Session from "../models/session";
 import AppError from "../utils/appError";
 
 const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+const isProduction = process.env.NODE_ENV === "production";
 
 export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
@@ -27,8 +28,10 @@ export const login = async (req: Request, res: Response) => {
 
     res.cookie("sessionId", sessionId, {
         httpOnly: true,
-        sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
+        // In production the frontend and API are on different domains,
+        // so the cookie must be "none" (which requires secure: true)
+        sameSite: isProduction ? "none" : "lax",
+        secure: isProduction,
         maxAge: SESSION_DURATION_MS,
     });
 
