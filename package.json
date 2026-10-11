@@ -4,12 +4,13 @@
   "description": "EstateFlow CRM backend (Express + Mongoose + TypeScript)",
   "license": "ISC",
   "author": "akshay akhade",
-  "main": "dist/app.js",
+  "main": "dist/server.js",
   "scripts": {
-    "dev": "tsx watch src/app.ts",
+    "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/app.js",
-    "seed:user": "tsx src/utils/seedUser.ts"
+    "start": "node dist/server.js",
+    "seed:user": "tsx src/utils/seedUser.ts",
+    "seed:leads": "tsx src/utils/seedLeads.ts"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

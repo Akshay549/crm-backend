@@ -3,6 +3,8 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRoute from "./routes/authRoute";
+import leadRoute from "./routes/leadRoute";
+import dashboardRoute from "./routes/dashboardRoute";
 import errorHandler from "./middleware/errorHandler";
 
 const app = express();
@@ -26,6 +28,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRoute);
+app.use("/leads", leadRoute);
+app.use("/dashboard", dashboardRoute);
 
 // 404 Handler
 

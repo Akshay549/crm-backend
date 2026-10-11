@@ -39,12 +39,27 @@ const errorHandler = (err: any, req: Request, res: Response, next: NextFunction)
         });
     }
 
-    // Duplicate value on a unique field
+    // Duplicate value on a unique field (for example, the same phone number twice)
     if (err.code === 11000) {
-        const field = Object.keys(err.keyPattern)[0];
+        const field = Object.keys(err.keyPattern ?? err.keyValue ?? {})[0];
+        const message =
+            field === "phone"
+                ? "A lead with this phone number already exists"
+                : field
+                  ? `${field} already exists`
+                  : "This value already exists";
         return res.status(409).json({
             success: false,
-            message: `${field} already exists`,
+            message,
+            errors: field ? [{ field, message }] : [],
+        });
+    }
+
+    // Request body is bigger than the limit set in app.ts
+    if (err.type === "entity.too.large") {
+        return res.status(413).json({
+            success: false,
+            message: "Request body is too large",
         });
     }
 

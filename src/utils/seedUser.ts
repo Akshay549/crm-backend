@@ -6,26 +6,26 @@ import User from "../models/user";
 
 // Run once: npm run seed:user
 const seedUser = async () => {
-  await connectDb();
+    await connectDb();
 
-  const existingUser = await User.findOne({ email: "demo@estateflow.in" });
+    const existingUser = await User.findOne({ email: "demo@estateflow.in" });
 
-  if (existingUser) {
-    console.log("Demo user already exists");
-  } else {
-    await User.create({
-      name: "Akshay",
-      email: "demo@estateflow.in",
-      password: await bcrypt.hash("demo1234", 10),
-      role: "Sales Executive",
-    });
-    console.log("Demo user created: demo@estateflow.in / demo1234");
-  }
+    if (existingUser) {
+        console.log("Demo user already exists");
+    } else {
+        await User.create({
+            name: "Akshay",
+            email: "demo@estateflow.in",
+            password: await bcrypt.hash("demo1234", 10),
+            role: "Sales Executive",
+        });
+        console.log("Demo user created: demo@estateflow.in / demo1234");
+    }
 
-  await mongoose.disconnect();
+    await mongoose.disconnect();
 };
 
 seedUser().catch((error) => {
-  console.error("Seed failed:", error.message);
-  process.exit(1);
+    console.error("Seed failed:", error.message);
+    process.exit(1);
 });

@@ -8,6 +8,21 @@ import AppError from "../utils/appError";
 const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 const isProduction = process.env.NODE_ENV === "production";
 
+const cookieOptions = {
+    httpOnly: true,
+    // In production the frontend and API are on different domains,
+    // so the cookie must be "none" (which requires secure: true)
+    sameSite: isProduction ? ("none" as const) : ("lax" as const),
+    secure: isProduction,
+};
+
+const formatUser = (user: any) => ({
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+});
+
 export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
@@ -26,25 +41,35 @@ export const login = async (req: Request, res: Response) => {
         expiresAt: new Date(Date.now() + SESSION_DURATION_MS),
     });
 
-    res.cookie("sessionId", sessionId, {
-        httpOnly: true,
-        // In production the frontend and API are on different domains,
-        // so the cookie must be "none" (which requires secure: true)
-        sameSite: isProduction ? "none" : "lax",
-        secure: isProduction,
-        maxAge: SESSION_DURATION_MS,
-    });
+    res.cookie("sessionId", sessionId, { ...cookieOptions, maxAge: SESSION_DURATION_MS });
 
     return res.status(200).json({
         success: true,
         message: "Login successful",
-        data: {
-            user: {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-            },
-        },
+        data: { user: formatUser(user) },
+    });
+};
+
+export const getMe = async (req: Request, res: Response) => {
+    return res.status(200).json({
+        success: true,
+        message: "User fetched successfully",
+        data: { user: formatUser(res.locals.user) },
+    });
+};
+
+// Safe to call even when the session is already gone
+export const logout = async (req: Request, res: Response) => {
+    const sessionId = req.cookies?.sessionId;
+
+    if (sessionId) {
+        await Session.deleteOne({ sessionId });
+    }
+
+    res.clearCookie("sessionId", cookieOptions);
+
+    return res.status(200).json({
+        success: true,
+        message: "Logged out successfully",
     });
 };
