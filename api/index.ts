@@ -2,8 +2,7 @@ import type { IncomingMessage, ServerResponse } from "http";
 import app from "../src/app";
 import connectDb from "../src/config/database";
 
-// Vercel runs this file as a serverless function.
-// vercel.json sends every URL here, and Express handles the routing.
+// Vercel runs this file as a serverless function and vercel.json sends every URL here, and Express handles the routing.
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
     try {
         await connectDb();

@@ -4,7 +4,7 @@ import User from "../models/user";
 import AppError from "../utils/appError";
 
 // Protects a route: the request must carry a valid sessionId cookie.
-// The logged-in user is available as res.locals.user
+
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
     const sessionId = req.cookies?.sessionId;
 

@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import connectDb from "../config/database";
 import User from "../models/user";
 
-// Run once: npm run seed:user
+// Optional - to get sample users
 const seedUser = async () => {
     await connectDb();
 

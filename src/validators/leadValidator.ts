@@ -3,19 +3,16 @@ import { propertyTypes, sources, statuses } from "../utils/constants";
 
 const oneOf = (label: string, values: readonly string[]) => `${label} must be one of: ${values.join(", ")}`;
 
-// Fields shared by create and update
 const leadFields = {
     name: z
         .string({ error: "Name is required" })
         .trim()
         .min(2, "Name must be at least 2 characters")
         .max(50, "Name must be at most 50 characters"),
-    // Spaces and symbols are removed, then exactly 10 digits are required
     phone: z
         .string({ error: "Phone number is required" })
         .transform((value) => value.replace(/\D/g, ""))
         .pipe(z.string().length(10, "Phone number must be 10 digits")),
-    // Optional: an empty string is allowed
     email: z
         .string()
         .trim()

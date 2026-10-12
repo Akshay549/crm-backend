@@ -10,8 +10,7 @@ const isProduction = process.env.NODE_ENV === "production";
 
 const cookieOptions = {
     httpOnly: true,
-    // In production the frontend and API are on different domains,
-    // so the cookie must be "none" (which requires secure: true)
+    // In production the frontend and API are on different domains,so the cookie must be "none" (which requires secure: true)
     sameSite: isProduction ? ("none" as const) : ("lax" as const),
     secure: isProduction,
 };
@@ -28,7 +27,6 @@ export const login = async (req: Request, res: Response) => {
 
     const user = await User.findOne({ email }).select("+password");
 
-    // Same message for wrong email and wrong password, so we don't reveal which one failed
     if (!user || !(await bcrypt.compare(password, user.password))) {
         throw new AppError("Invalid email or password", 401);
     }

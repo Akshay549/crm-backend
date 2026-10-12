@@ -6,7 +6,6 @@ import Note from "../models/note";
 import User from "../models/user";
 import { generateLeadId } from "./generateLeadId";
 
-// Sample leads (newest first). daysAgo sets how old the lead is.
 const sampleLeads = [
     { name: "Priya Sharma", phone: "9876543210", email: "priya.sharma@example.com", budget: 12500000, location: "Powai, Mumbai", propertyType: "3 BHK", source: "Google", status: "Site Visit", daysAgo: 1, note: "Prefers a higher floor with a balcony. Site visit planned for Saturday." },
     { name: "Rahul Mehta", phone: "9820123456", email: "rahul.mehta@example.com", budget: 8500000, location: "Thane West", propertyType: "2 BHK", source: "Referral", status: "Contacted", daysAgo: 2, note: "Discussed budget and possession timeline. Follow up tomorrow." },
@@ -22,7 +21,7 @@ const sampleLeads = [
     { name: "Rohan Gupta", phone: "9867788990", email: "", budget: 4800000, location: "Dombivli", propertyType: "1 BHK", source: "Walk-in", status: "Contacted", daysAgo: 12 },
 ];
 
-// Run once: npm run seed:leads  (run npm run seed:user first)
+//optional - to plants sample data.
 const seedLeads = async () => {
     await connectDb();
 

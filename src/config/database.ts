@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
-// Serverless functions are reused between requests, so we keep the
-// connection promise and avoid opening a new connection every time.
+// Serverless functions are reused between requests, so we keep the connection promise and avoid opening a new connection every time.
 let connection: Promise<typeof mongoose> | null = null;
 
 const connectDb = async () => {

@@ -1,4 +1,4 @@
-// Used in schemas so the API returns "id" instead of "_id" and hides "__v"
+// "id" instead of "_id" and hides "__v"
 export const toJsonOptions = {
     versionKey: false,
     transform: (_doc: unknown, ret: Record<string, any>) => {
