@@ -5,13 +5,12 @@ import User from "../models/user";
 import Session from "../models/session";
 import AppError from "../utils/appError";
 
-const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
 const isProduction = process.env.NODE_ENV === "production";
 
 const cookieOptions = {
     httpOnly: true,
-    // In production the frontend and API are on different domains,so the cookie must be "none" (which requires secure: true)
-    sameSite: isProduction ? ("none" as const) : ("lax" as const),
+    sameSite: "lax" as const,
     secure: isProduction,
 };
 
@@ -27,6 +26,7 @@ export const login = async (req: Request, res: Response) => {
 
     const user = await User.findOne({ email }).select("+password");
 
+    // Same message for wrong email and wrong password, so we don't reveal which one failed
     if (!user || !(await bcrypt.compare(password, user.password))) {
         throw new AppError("Invalid email or password", 401);
     }
@@ -56,7 +56,6 @@ export const getMe = async (req: Request, res: Response) => {
     });
 };
 
-// Safe to call even when the session is already gone
 export const logout = async (req: Request, res: Response) => {
     const sessionId = req.cookies?.sessionId;
 
